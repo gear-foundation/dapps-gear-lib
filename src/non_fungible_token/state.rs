@@ -9,7 +9,7 @@ pub struct NFTState {
     pub symbol: String,
     pub base_uri: String,
     pub owner_by_id: BTreeMap<TokenId, ActorId>,
-    pub token_approvals: BTreeMap<TokenId, Vec<ActorId>>,
+    pub token_approvals: BTreeMap<TokenId, BTreeSet<ActorId>>,
     pub token_metadata_by_id: BTreeMap<TokenId, Option<TokenMetadata>>,
     pub tokens_for_owner: BTreeMap<ActorId, Vec<TokenId>>,
     pub royalties: Option<Royalties>,
@@ -28,6 +28,7 @@ pub enum NFTQuery {
     TotalSupply,
     SupplyForOwner { owner: ActorId },
     AllTokens,
+    ApprovedTokens { account: ActorId },
 }
 
 #[derive(Debug, Decode, Encode, TypeInfo)]
@@ -51,6 +52,9 @@ pub enum NFTQueryReply {
     },
     AllTokens {
         tokens: Vec<Token>,
+    },
+    ApprovedTokens {
+        tokens: Vec<TokenId>,
     },
 }
 
@@ -101,6 +105,19 @@ pub trait NFTMetaState: NFTStateKeeper {
             .map(|id| self.token(*id))
             .collect()
     }
+    fn approved_tokens(&self, account: &ActorId) -> Vec<TokenId> {
+        let mut tokens: Vec<TokenId> = Vec::new();
+        let all_tokens = self.all_tokens();
+        for token in all_tokens
+        {
+            if let Some(token_approvals) = self.get().token_approvals.get(&token.id) {
+                if token_approvals.contains(account) {
+                    tokens.push(token.id);
+                }
+            }
+        }
+        tokens
+    }
 
     fn proc_state(&self, query: NFTQuery) -> Option<Vec<u8>> {
         let encoded = match query {
@@ -128,6 +145,10 @@ pub trait NFTMetaState: NFTStateKeeper {
             .encode(),
             NFTQuery::AllTokens => NFTQueryReply::AllTokens {
                 tokens: self.all_tokens(),
+            }
+            .encode(),
+            NFTQuery::ApprovedTokens { account } => NFTQueryReply::ApprovedTokens {
+                tokens: self.approved_tokens(&account),
             }
             .encode(),
         };
