@@ -170,12 +170,41 @@ pub trait NFTCore: NFTStateKeeper {
         self.get_mut()
             .token_approvals
             .entry(token_id)
-            .and_modify(|approvals| approvals.push(*to))
-            .or_insert_with(|| vec![*to]);
+            .and_modify(|approvals| {
+                approvals.insert(*to);
+            })
+            .or_insert_with(|| {
+                let mut a = BTreeSet::new();
+                a.insert(*to);
+                a
+            });
         msg::reply(
             NFTApproval {
                 owner,
                 approved_account: *to,
+                token_id,
+            }
+            .encode(),
+            0,
+        )
+        .unwrap();
+    }
+
+    fn revoke_approval(&mut self, approved_account: &ActorId, token_id: TokenId) {
+        let owner = *self
+            .get()
+            .owner_by_id
+            .get(&token_id)
+            .expect("NonFungibleToken: token does not exist");
+        self.assert_owner(&owner);
+        self.get_mut()
+            .token_approvals
+            .entry(token_id)
+            .and_modify(|approvals| {approvals.remove(approved_account);});
+        msg::reply(
+            NFTApproval {
+                owner,
+                approved_account: ZERO_ID,
                 token_id,
             }
             .encode(),
