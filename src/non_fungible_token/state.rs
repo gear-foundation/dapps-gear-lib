@@ -54,7 +54,7 @@ pub enum NFTQueryReply {
         tokens: Vec<Token>,
     },
     ApprovedTokens {
-        tokens: Vec<TokenId>,
+        tokens: Vec<Token>,
     },
 }
 
@@ -105,14 +105,14 @@ pub trait NFTMetaState: NFTStateKeeper {
             .map(|id| self.token(*id))
             .collect()
     }
-    fn approved_tokens(&self, account: &ActorId) -> Vec<TokenId> {
-        let mut tokens: Vec<TokenId> = Vec::new();
+    fn approved_tokens(&self, account: &ActorId) -> Vec<Token> {
+        let mut tokens: Vec<Token> = Vec::new();
         let all_tokens = self.all_tokens();
         for token in all_tokens
         {
             if let Some(token_approvals) = self.get().token_approvals.get(&token.id) {
                 if token_approvals.contains(account) {
-                    tokens.push(token.id);
+                    tokens.push(token);
                 }
             }
         }
