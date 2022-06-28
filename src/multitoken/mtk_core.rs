@@ -1,7 +1,7 @@
 use crate::multitoken::{io::*, state::*};
 use gstd::{exec, msg, prelude::*, ActorId};
 
-const ZERO_ID: ActorId = ActorId::new([0u8; 32]);
+const ZERO_ID: ActorId = ActorId::zero();
 
 pub trait MTKCore: StateKeeper + MTKTokenState {
     fn assert_can_burn(&mut self, owner: &ActorId, id: &TokenId, amount: u128) {

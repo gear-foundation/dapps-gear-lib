@@ -1,6 +1,6 @@
 use crate::non_fungible_token::{io::*, royalties::*, state::*, token::*};
 use gstd::{exec, msg, prelude::*, ActorId};
-const ZERO_ID: ActorId = ActorId::new([0u8; 32]);
+const ZERO_ID: ActorId = ActorId::zero();
 
 pub trait NFTCore: NFTStateKeeper {
     /// Mints a new token
