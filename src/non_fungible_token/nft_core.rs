@@ -34,7 +34,7 @@ pub trait NFTCore: NFTStateKeeper {
             .encode(),
             0,
         )
-        .unwrap();
+        .expect("Error during a reply with NFTEvent::NFTTransfer");
     }
 
     /// Burns a token
@@ -67,7 +67,7 @@ pub trait NFTCore: NFTStateKeeper {
             .encode(),
             0,
         )
-        .unwrap();
+        .expect("Error during a reply with NFTEvent::NFTTransfer");
     }
 
     /// Transfers a token to the new owner
@@ -91,7 +91,7 @@ pub trait NFTCore: NFTStateKeeper {
             .encode(),
             0,
         )
-        .unwrap();
+        .expect("Error during a reply with NFTEvent::NFTTransfer");
     }
 
     /// Transfers a token to the new owner
@@ -117,7 +117,7 @@ pub trait NFTCore: NFTStateKeeper {
             .encode(),
             0,
         )
-        .unwrap();
+        .expect("Error during a reply with NFTEvent::NFTTransferPayout");
     }
 
     fn internal_transfer(&mut self, to: &ActorId, token_id: TokenId) -> ActorId {
@@ -181,7 +181,7 @@ pub trait NFTCore: NFTStateKeeper {
             .encode(),
             0,
         )
-        .unwrap();
+        .expect("Error during a reply with NFTEvent::NFTApproval");
     }
 
     /// Returns a `Payout` struct for a given token

@@ -1,6 +1,6 @@
 use crate::fungible_token::{io::*, state::*};
-use gstd::{exec, msg, prelude::*, ActorId};
-const ZERO_ID: ActorId = ActorId::new([0u8; 32]);
+use gstd::{msg, prelude::*, ActorId};
+const ZERO_ID: ActorId = ActorId::zero();
 
 pub trait FTCore: FTStateKeeper {
     /// Mints `amount` of token
@@ -24,17 +24,23 @@ pub trait FTCore: FTStateKeeper {
             .encode(),
             0,
         )
-        .expect("Error during a replying with FTEvent::FTTransfer");
+        .expect("Error during a reply with FTEvent::FTTransfer");
     }
 
     /// Burns `amount` of token
     ///
     /// Requirements:
-    /// * msg.sender MUST have enough tokens on his balance
+    /// * `msg::source()` MUST have enough tokens on his balance
     /// Arguments:
     /// `amount`: The amount of token to be burnt
     fn burn(&mut self, amount: u128) {
-        if self.get().balances.get(&msg::source()).unwrap_or(&0) < &amount {
+        if self
+            .get()
+            .balances
+            .get(&msg::source())
+            .expect("The account has no balance at all")
+            < &amount
+        {
             panic!("Amount exceeds account's balance");
         }
         self.get_mut()
@@ -50,7 +56,7 @@ pub trait FTCore: FTStateKeeper {
             },
             0,
         )
-        .expect("Error during a replying with FTEvent::FTTransfer");
+        .expect("Error during a reply with FTEvent::FTTransfer");
     }
 
     /// Transfer `amount` of token
@@ -71,7 +77,13 @@ pub trait FTCore: FTStateKeeper {
         if !self.can_transfer(from, amount) {
             panic!("Not allowed to transfer")
         }
-        if self.get().balances.get(from).unwrap_or(&0) < &amount {
+        if self
+            .get()
+            .balances
+            .get(from)
+            .expect("The account has no balance at all")
+            < &amount
+        {
             panic!("Amount exceeds account's balance");
         }
         self.get_mut()
@@ -91,7 +103,7 @@ pub trait FTCore: FTStateKeeper {
             },
             0,
         )
-        .expect("Error during a replying with FTEvent::FTTransfer");
+        .expect("Error during a reply with FTEvent::FTTransfer");
     }
 
     /// Gives a right to another account to manage the `amount` of token
@@ -120,17 +132,11 @@ pub trait FTCore: FTStateKeeper {
             },
             0,
         )
-        .expect("Error during a replying with FTEvent::FTApproval");
+        .expect("Error during a reply with FTEvent::FTApproval");
     }
 
     /// Checks whether it is possible to perform a transfer
     fn can_transfer(&mut self, from: &ActorId, amount: u128) -> bool {
-        if from == &msg::source()
-            || from == &exec::origin()
-            || self.get().balances.get(&msg::source()).unwrap_or(&0) >= &amount
-        {
-            return true;
-        }
         if let Some(allowed_amount) = self
             .get()
             .allowances
