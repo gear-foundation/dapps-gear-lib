@@ -106,16 +106,19 @@ pub trait NFTMetaState: NFTStateKeeper {
             .collect()
     }
     fn approved_tokens(&self, account: &ActorId) -> Vec<Token> {
-        let mut tokens: Vec<Token> = Vec::new();
-        let all_tokens = self.all_tokens();
-        for token in all_tokens {
-            if let Some(token_approvals) = self.get().token_approvals.get(&token.id) {
-                if token_approvals.contains(account) {
-                    tokens.push(token);
-                }
-            }
-        }
-        tokens
+        self.get()
+            .owner_by_id
+            .keys()
+            .filter_map(|id| {
+                self.get().token_approvals.get(id).and_then(|approvals| {
+                    if approvals.contains(account) {
+                        Some(self.token(*id))
+                    } else {
+                        None
+                    }
+                })
+            })
+            .collect()
     }
 
     fn proc_state(&self, query: NFTQuery) -> Option<Vec<u8>> {
