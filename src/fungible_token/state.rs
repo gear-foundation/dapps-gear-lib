@@ -4,17 +4,17 @@ use scale_info::TypeInfo;
 
 #[derive(Debug, Default)]
 pub struct FTState {
-    // Token name
+    /// Token name.
     pub name: String,
-    // Token symbol
+    /// Token symbol.
     pub symbol: String,
-    // Token's total supply
+    /// Token's total supply.
     pub total_supply: u128,
-    // Token's decimals
+    /// Token's decimals.
     pub decimals: u8,
-    // Token holders balances
+    /// Token holders balances.
     pub balances: BTreeMap<ActorId, u128>,
-    // Token holders allowance to manipulate token amounts
+    /// Token holders allowance to manipulate token amounts.
     pub allowances: BTreeMap<ActorId, BTreeMap<ActorId, u128>>,
 }
 
@@ -43,15 +43,15 @@ pub enum FTQueryReply {
 
 pub trait FTMetaState: FTStateKeeper {
     fn proc_state(&self, query: FTQuery) -> Option<Vec<u8>> {
-        let encoded = match query {
-            FTQuery::Name => FTQueryReply::Name(self.get().name.clone()).encode(),
-            FTQuery::Symbol => FTQueryReply::Symbol(self.get().symbol.clone()).encode(),
-            FTQuery::Decimals => FTQueryReply::Decimals(self.get().decimals).encode(),
-            FTQuery::TotalSupply => FTQueryReply::TotalSupply(self.get().total_supply).encode(),
+        let reply = match query {
+            FTQuery::Name => FTQueryReply::Name(self.get().name.clone()),
+            FTQuery::Symbol => FTQueryReply::Symbol(self.get().symbol.clone()),
+            FTQuery::Decimals => FTQueryReply::Decimals(self.get().decimals),
+            FTQuery::TotalSupply => FTQueryReply::TotalSupply(self.get().total_supply),
             FTQuery::BalanceOf { account } => {
-                FTQueryReply::BalanceOf(*self.get().balances.get(&account).unwrap_or(&0)).encode()
+                FTQueryReply::BalanceOf(*self.get().balances.get(&account).unwrap_or(&0))
             }
         };
-        Some(encoded)
+        Some(reply.encode())
     }
 }
