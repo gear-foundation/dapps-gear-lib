@@ -108,8 +108,7 @@ pub trait NFTMetaState: NFTStateKeeper {
     fn approved_tokens(&self, account: &ActorId) -> Vec<Token> {
         let mut tokens: Vec<Token> = Vec::new();
         let all_tokens = self.all_tokens();
-        for token in all_tokens
-        {
+        for token in all_tokens {
             if let Some(token_approvals) = self.get().token_approvals.get(&token.id) {
                 if token_approvals.contains(account) {
                     tokens.push(token);
@@ -125,33 +124,27 @@ pub trait NFTMetaState: NFTStateKeeper {
                 name: self.get().name.clone(),
                 symbol: self.get().symbol.clone(),
                 base_uri: self.get().base_uri.clone(),
-            }
-            .encode(),
+            },
             NFTQuery::Token { token_id } => NFTQueryReply::Token {
                 token: self.token(token_id),
-            }
-            .encode(),
+            },
             NFTQuery::TokensForOwner { owner } => NFTQueryReply::TokensForOwner {
                 tokens: self.tokens_for_owner(&owner),
-            }
-            .encode(),
+            },
             NFTQuery::TotalSupply => NFTQueryReply::TotalSupply {
                 total_supply: self.total_supply(),
-            }
-            .encode(),
+            },
             NFTQuery::SupplyForOwner { owner } => NFTQueryReply::SupplyForOwner {
                 supply: self.supply_for_owner(&owner),
-            }
-            .encode(),
+            },
             NFTQuery::AllTokens => NFTQueryReply::AllTokens {
                 tokens: self.all_tokens(),
-            }
-            .encode(),
+            },
             NFTQuery::ApprovedTokens { account } => NFTQueryReply::ApprovedTokens {
                 tokens: self.approved_tokens(&account),
-            }
-            .encode(),
-        };
+            },
+        }
+        .encode();
         Some(encoded)
     }
 }
