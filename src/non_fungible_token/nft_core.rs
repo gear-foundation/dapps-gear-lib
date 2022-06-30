@@ -34,7 +34,7 @@ pub trait NFTCore: NFTStateKeeper {
             .encode(),
             0,
         )
-        .expect("Error during a reply with NFTEvent::NFTTransfer");
+        .expect("Error in reply `NFTTransfer`, mint function");
     }
 
     /// Burns a token
@@ -67,7 +67,7 @@ pub trait NFTCore: NFTStateKeeper {
             .encode(),
             0,
         )
-        .expect("Error during a reply with NFTEvent::NFTTransfer");
+        .expect("Error in reply `NFTTransfer`, burn function");
     }
 
     /// Transfers a token to the new owner
@@ -91,7 +91,7 @@ pub trait NFTCore: NFTStateKeeper {
             .encode(),
             0,
         )
-        .expect("Error during a reply with NFTEvent::NFTTransfer");
+        .expect("Error in reply `NFTApproval`, transfer function");
     }
 
     /// Transfers a token to the new owner
@@ -117,7 +117,7 @@ pub trait NFTCore: NFTStateKeeper {
             .encode(),
             0,
         )
-        .expect("Error during a reply with NFTEvent::NFTTransferPayout");
+        .expect("Error in reply `NFTTransferPayout`");
     }
 
     fn internal_transfer(&mut self, to: &ActorId, token_id: TokenId) -> ActorId {
@@ -183,7 +183,7 @@ pub trait NFTCore: NFTStateKeeper {
             .encode(),
             0,
         )
-        .expect("Error during a reply with NFTEvent::NFTApproval");
+        .expect("Error in reply `NFTApproval`, approve function");
     }
 
     fn revoke_approval(&mut self, approved_account: &ActorId, token_id: TokenId) {
@@ -208,7 +208,7 @@ pub trait NFTCore: NFTStateKeeper {
             .encode(),
             0,
         )
-        .unwrap();
+        .expect("Error in reply `NFTApproval`, revoke_approval function");
     }
 
     /// Returns a `Payout` struct for a given token
