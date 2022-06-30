@@ -173,11 +173,7 @@ pub trait NFTCore: NFTStateKeeper {
             .and_modify(|approvals| {
                 approvals.insert(*to);
             })
-            .or_insert_with(|| {
-                let mut a = BTreeSet::new();
-                a.insert(*to);
-                a
-            });
+            .or_insert_with(|| BTreeSet::from([*to]));
         msg::reply(
             NFTApproval {
                 owner,
@@ -200,7 +196,9 @@ pub trait NFTCore: NFTStateKeeper {
         self.get_mut()
             .token_approvals
             .entry(token_id)
-            .and_modify(|approvals| {approvals.remove(approved_account);});
+            .and_modify(|approvals| {
+                approvals.remove(approved_account);
+            });
         msg::reply(
             NFTApproval {
                 owner,
