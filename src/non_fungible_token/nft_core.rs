@@ -220,7 +220,7 @@ pub trait NFTCore: NFTStateKeeper {
         msg::reply(owner.encode(), 0).expect("Error in reply 'ActorId', owner_of function");
     }
 
-    fn is_approved_to(&self, token_id: TokenId, to: ActorId) {
+    fn is_approved_to(&self, to: &ActorId, token_id: TokenId) {
         let result = *self.get()
             .token_approvals
             .get(&token_id)
