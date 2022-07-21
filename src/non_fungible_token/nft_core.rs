@@ -221,11 +221,12 @@ pub trait NFTCore: NFTStateKeeper {
     }
 
     fn is_approved_to(&self, to: &ActorId, token_id: TokenId) {
-        let result = *self.get()
+        let result = self
+            .get()
             .token_approvals
             .get(&token_id)
             .expect("NonFungibleToken: token does not exist")
-            .contains(&to);
+            .contains(to);
 
         msg::reply(result.encode(), 0).expect("Error in reply 'bool', is_approved_to function");
     }
