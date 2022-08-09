@@ -25,7 +25,7 @@ impl DelegatedApproveMessage {
         }
 
         if self.approved_actor_id == ActorId::zero() {
-            panic!("NonFungibleToken: Zero address");
+            panic!("Zero address, just use burn if you want to remove token");
         }
 
         if true_token_owner != &self.token_owner_id {
@@ -36,14 +36,10 @@ impl DelegatedApproveMessage {
             panic!("Delegated approve has expired")
         }
 
-        let massage_bytes = unsafe { self.bytes_ref() };
+        let massage_bytes = self.encode();
         let owner = Public(self.token_owner_id.into());
         if !Sr25519Pair::verify(signed_approve, massage_bytes, &owner) {
             panic!("Failed sign verification")
         }
-    }
-
-    unsafe fn bytes_ref(&self) -> &[u8] {
-        slice::from_raw_parts((self as *const Self) as *const u8, mem::size_of::<Self>())
     }
 }
