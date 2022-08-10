@@ -36,10 +36,9 @@ impl DelegatedApproveMessage {
             panic!("Delegated approve has expired")
         }
 
-        let massage_bytes = self.encode();
         let owner = Public(self.token_owner_id.into());
-        if !Sr25519Pair::verify(signed_approve, massage_bytes, &owner) {
-            panic!("Failed sign verification, sig: {:?}, message: {:?}, pubkey: {:?}", *signed_approve, massage_bytes, owner)
+        if !Sr25519Pair::verify(signed_approve, self.encode(), &owner) {
+            panic!("Failed sign verification, sig: {:?}, message: {:?}, pubkey: {:?}", *signed_approve, self.encode(), owner)
         }
     }
 }
