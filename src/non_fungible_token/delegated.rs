@@ -38,7 +38,6 @@ impl DelegatedApproveMessage {
 
         let owner = Public(self.token_owner_id.into());
         if !Sr25519Pair::verify(signed_approve, self.encode(), &owner) {
-            debug!("Failed sign verification, sig: {:?}, message: {:?}, pubkey: {:?}", *signed_approve, self.encode(), owner);
             panic!("Failed sign verification");
         }
     }
