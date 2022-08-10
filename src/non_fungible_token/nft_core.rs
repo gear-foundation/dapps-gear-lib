@@ -234,7 +234,6 @@ pub trait NFTCore: NFTStateKeeper {
     }
 
     fn delegated_approve(&mut self, message: DelegatedApproveMessage, signed_approve: [u8; 64]) {
-        let to = &message.approved_actor_id;
         let token_id = message.token_id;
         let owner = *self
             .get()
@@ -242,7 +241,6 @@ pub trait NFTCore: NFTStateKeeper {
             .get(&token_id)
             .expect("NonFungibleToken: token does not exist");
 
-        self.assert_zero_address(to);
         message.validate(&Signature(signed_approve), &owner);
 
         self.get_mut()
