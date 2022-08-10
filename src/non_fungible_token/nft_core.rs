@@ -234,6 +234,7 @@ pub trait NFTCore: NFTStateKeeper {
     }
 
     fn delegated_approve(&mut self, message: DelegatedApproveMessage, signed_approve: [u8; 64]) {
+        let to = &message.approved_actor_id;
         let token_id = message.token_id;
         let owner = *self
             .get()

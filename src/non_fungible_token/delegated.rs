@@ -1,5 +1,5 @@
 use crate::non_fungible_token::token::*;
-use gstd::{exec, msg, prelude::*, ActorId, debug};
+use gstd::{exec, msg, prelude::*, ActorId};
 use sp_core::{
     sr25519::{Pair as Sr25519Pair, Public, Signature},
     Pair,
