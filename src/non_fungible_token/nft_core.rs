@@ -24,17 +24,16 @@ pub trait NFTCore: NFTStateKeeper {
             .or_insert_with(|| vec![token_id]);
         self.get_mut()
             .token_metadata_by_id
-            .insert(token_id, token_metadata);
+            .insert(token_id, token_metadata.clone());
         msg::reply(
-            NFTTransfer {
-                from: ZERO_ID,
-                to: *to,
+            NFTEvent::Minted {
                 token_id,
-            }
-            .encode(),
+                owner: *to,
+                token_metadata,
+            },
             0,
         )
-        .expect("Error in reply `NFTTransfer`, mint function");
+        .expect("Error in reply `NFTEvent::Mint`");
     }
 
     /// Burns a token
@@ -59,15 +58,12 @@ pub trait NFTCore: NFTStateKeeper {
             .entry(owner)
             .and_modify(|tokens| tokens.retain(|&token| token != token_id));
         msg::reply(
-            NFTTransfer {
-                from: owner,
-                to: ZERO_ID,
+            NFTEvent::Burnt {
                 token_id,
-            }
-            .encode(),
+            },
             0,
         )
-        .expect("Error in reply `NFTTransfer`, burn function");
+        .expect("Error in reply `NFTEvent::Burnt`");
     }
 
     /// Transfers a token to the new owner
@@ -83,15 +79,14 @@ pub trait NFTCore: NFTStateKeeper {
     fn transfer(&mut self, to: &ActorId, token_id: TokenId) {
         let owner = self.internal_transfer(to, token_id);
         msg::reply(
-            NFTTransfer {
-                from: owner,
+            NFTEvent::Transfer {
+                from: owner, 
                 to: *to,
                 token_id,
-            }
-            .encode(),
+            },
             0,
         )
-        .expect("Error in reply `NFTApproval`, transfer function");
+        .expect("Error in reply `NFTEvent::Transfer`");
     }
 
     /// Transfers a token to the new owner
@@ -108,16 +103,15 @@ pub trait NFTCore: NFTStateKeeper {
         let owner = self.internal_transfer(to, token_id);
         let payouts = self.nft_payout(&owner, amount);
         msg::reply(
-            NFTTransferPayout {
+            NFTEvent::TransferPayout {
                 from: owner,
                 to: *to,
                 token_id,
                 payouts,
-            }
-            .encode(),
+            },
             0,
         )
-        .expect("Error in reply `NFTTransferPayout`");
+        .expect("Error in reply `NFTEvent::TransferPayout`");
     }
 
     fn internal_transfer(&mut self, to: &ActorId, token_id: TokenId) -> ActorId {
@@ -175,15 +169,14 @@ pub trait NFTCore: NFTStateKeeper {
             })
             .or_insert_with(|| BTreeSet::from([*to]));
         msg::reply(
-            NFTApproval {
+            NFTEvent::Approval {
                 owner,
                 approved_account: *to,
                 token_id,
-            }
-            .encode(),
+            },
             0,
         )
-        .expect("Error in reply `NFTApproval`, approve function");
+        .expect("Error in reply `NFTEvent::Approval`");
     }
 
     fn revoke_approval(&mut self, approved_account: &ActorId, token_id: TokenId) {
@@ -200,7 +193,7 @@ pub trait NFTCore: NFTStateKeeper {
                 approvals.remove(approved_account);
             });
         msg::reply(
-            NFTApproval {
+            NFTEvent::Approval {
                 owner,
                 approved_account: ZERO_ID,
                 token_id,
@@ -208,7 +201,7 @@ pub trait NFTCore: NFTStateKeeper {
             .encode(),
             0,
         )
-        .expect("Error in reply `NFTApproval`, revoke_approval function");
+        .expect("Error in reply `NFTEvent::Approval`, revoke_approval function");
     }
 
     /// Returns a `Payout` struct for a given token

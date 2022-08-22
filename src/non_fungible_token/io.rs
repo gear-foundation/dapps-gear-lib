@@ -4,23 +4,29 @@ use gstd::{prelude::*, ActorId};
 use scale_info::TypeInfo;
 
 #[derive(Debug, Encode, Decode, TypeInfo)]
-pub struct NFTTransfer {
-    pub from: ActorId,
-    pub to: ActorId,
-    pub token_id: TokenId,
-}
-
-#[derive(Debug, Encode, Decode, TypeInfo)]
-pub struct NFTTransferPayout {
-    pub from: ActorId,
-    pub to: ActorId,
-    pub token_id: TokenId,
-    pub payouts: Payout,
-}
-
-#[derive(Debug, Encode, Decode, TypeInfo)]
-pub struct NFTApproval {
-    pub owner: ActorId,
-    pub approved_account: ActorId,
-    pub token_id: TokenId,
+pub enum NFTEvent {
+    Minted {
+        token_id: TokenId,
+        owner: ActorId,
+        token_metadata: Option<TokenMetadata>,
+    },
+    Burnt {
+        token_id: TokenId,
+    },
+    Transfer {
+        from: ActorId,
+        to: ActorId,
+        token_id: TokenId,
+    },
+    TransferPayout {
+        from: ActorId,
+        to: ActorId,
+        token_id: TokenId,
+        payouts: Payout,
+    }, 
+    Approval {
+        owner: ActorId,
+        approved_account: ActorId,
+        token_id: TokenId,
+    },
 }
