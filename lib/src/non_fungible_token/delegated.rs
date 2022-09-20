@@ -33,7 +33,7 @@ impl DelegatedApproveMessage {
         }
 
         let owner: [u8; 32] = self.token_owner_id.into();
-        if !sr25519::verify(signed_approve, self.encode(), &owner).is_ok() {
+        if sr25519::verify(signed_approve, self.encode(), owner).is_err() {
             panic!("Failed sign verification");
         }
     }
