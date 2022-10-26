@@ -19,6 +19,8 @@ pub trait StateKeeper {
 }
 
 #[derive(Debug, Decode, Encode, TypeInfo)]
+#[codec(crate = gstd::codec)]
+#[scale_info(crate = gstd::scale_info)]
 pub enum MTKQuery {
     Name,
     Symbol,
@@ -33,6 +35,8 @@ pub enum MTKQuery {
 }
 
 #[derive(Debug, Decode, Encode, TypeInfo)]
+#[codec(crate = gstd::codec)]
+#[scale_info(crate = gstd::scale_info)]
 pub enum MTKQueryReply {
     Name(String),
     Symbol(String),

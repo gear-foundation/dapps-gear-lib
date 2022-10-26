@@ -1,7 +1,5 @@
 use crate::non_fungible_token::{royalties::*, token::*};
-use codec::{Decode, Encode};
 use gstd::{prelude::*, ActorId};
-use scale_info::TypeInfo;
 
 #[derive(Debug, Default)]
 pub struct NFTState {
@@ -21,6 +19,8 @@ pub trait NFTStateKeeper {
 }
 
 #[derive(Debug, Decode, Encode, TypeInfo)]
+#[codec(crate = gstd::codec)]
+#[scale_info(crate = gstd::scale_info)]
 pub enum NFTQuery {
     NFTInfo,
     Token { token_id: TokenId },
@@ -32,6 +32,8 @@ pub enum NFTQuery {
 }
 
 #[derive(Debug, Decode, Encode, TypeInfo)]
+#[codec(crate = gstd::codec)]
+#[scale_info(crate = gstd::scale_info)]
 pub enum NFTQueryReply {
     NFTInfo {
         name: String,

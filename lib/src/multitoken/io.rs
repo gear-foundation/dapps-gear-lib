@@ -1,9 +1,10 @@
-use codec::{Decode, Encode};
 use gstd::{prelude::*, ActorId};
-use scale_info::TypeInfo;
+
 pub type TokenId = u128;
 
 #[derive(Debug, Decode, Encode, TypeInfo, Default, Clone, PartialEq, Eq)]
+#[codec(crate = gstd::codec)]
+#[scale_info(crate = gstd::scale_info)]
 pub struct TokenMetadata {
     pub title: Option<String>,
     pub description: Option<String>,
@@ -12,6 +13,8 @@ pub struct TokenMetadata {
 }
 
 #[derive(Debug, Decode, Encode, TypeInfo, Default, Clone, PartialEq, Eq)]
+#[codec(crate = gstd::codec)]
+#[scale_info(crate = gstd::scale_info)]
 pub struct Token {
     pub id: TokenId,
     pub amount: u128,
@@ -19,6 +22,8 @@ pub struct Token {
 }
 
 #[derive(Debug, Decode, Encode, TypeInfo)]
+#[codec(crate = gstd::codec)]
+#[scale_info(crate = gstd::scale_info)]
 pub struct InitConfig {
     pub name: String,
     pub symbol: String,
@@ -26,6 +31,8 @@ pub struct InitConfig {
 }
 
 #[derive(Debug, Encode, Decode, TypeInfo, PartialEq, Eq)]
+#[codec(crate = gstd::codec)]
+#[scale_info(crate = gstd::scale_info)]
 pub struct BalanceReply {
     pub account: ActorId,
     pub id: TokenId,
@@ -33,6 +40,8 @@ pub struct BalanceReply {
 }
 
 #[derive(Debug, Encode, Decode, TypeInfo)]
+#[codec(crate = gstd::codec)]
+#[scale_info(crate = gstd::scale_info)]
 pub enum MTKEvent {
     Transfer {
         operator: ActorId,

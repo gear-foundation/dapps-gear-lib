@@ -1,10 +1,11 @@
-use codec::{Decode, Encode};
 use gstd::{prelude::*, ActorId};
 use primitive_types::U256;
-use scale_info::TypeInfo;
+
 pub type TokenId = U256;
 
 #[derive(Debug, Default, Decode, Encode, TypeInfo, PartialEq, Eq)]
+#[codec(crate = gstd::codec)]
+#[scale_info(crate = gstd::scale_info)]
 pub struct Token {
     pub id: TokenId,
     pub owner_id: ActorId,
@@ -16,6 +17,8 @@ pub struct Token {
 }
 
 #[derive(Debug, Default, Encode, Decode, Clone, TypeInfo, PartialEq, Eq)]
+#[codec(crate = gstd::codec)]
+#[scale_info(crate = gstd::scale_info)]
 pub struct TokenMetadata {
     // ex. "CryptoKitty #100"
     pub name: String,
