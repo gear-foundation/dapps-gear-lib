@@ -3,8 +3,6 @@ use gstd::{prelude::*, ActorId};
 pub type Payout = BTreeMap<ActorId, u128>;
 
 #[derive(Debug, Decode, Encode, TypeInfo, Clone)]
-#[codec(crate = gstd::codec)]
-#[scale_info(crate = gstd::scale_info)]
 pub struct Royalties {
     accounts: Payout,
     percent: u16,

@@ -19,8 +19,6 @@ pub trait NFTStateKeeper {
 }
 
 #[derive(Debug, Decode, Encode, TypeInfo)]
-#[codec(crate = gstd::codec)]
-#[scale_info(crate = gstd::scale_info)]
 pub enum NFTQuery {
     NFTInfo,
     Token { token_id: TokenId },
@@ -32,8 +30,6 @@ pub enum NFTQuery {
 }
 
 #[derive(Debug, Decode, Encode, TypeInfo)]
-#[codec(crate = gstd::codec)]
-#[scale_info(crate = gstd::scale_info)]
 pub enum NFTQueryReply {
     NFTInfo {
         name: String,

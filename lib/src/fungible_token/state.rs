@@ -22,8 +22,6 @@ pub trait FTStateKeeper {
 }
 
 #[derive(Debug, Decode, Encode, TypeInfo)]
-#[codec(crate = gstd::codec)]
-#[scale_info(crate = gstd::scale_info)]
 pub enum FTQuery {
     Name,
     Symbol,
@@ -33,8 +31,6 @@ pub enum FTQuery {
 }
 
 #[derive(Debug, Decode, Encode, TypeInfo)]
-#[codec(crate = gstd::codec)]
-#[scale_info(crate = gstd::scale_info)]
 pub enum FTQueryReply {
     Name(String),
     Symbol(String),

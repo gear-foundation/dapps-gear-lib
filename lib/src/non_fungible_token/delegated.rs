@@ -2,8 +2,6 @@ use crate::non_fungible_token::token::*;
 use gstd::{exec, msg, prelude::*, ActorId};
 
 #[derive(Debug, Encode, Decode, TypeInfo, Clone)]
-#[codec(crate = gstd::codec)]
-#[scale_info(crate = gstd::scale_info)]
 pub struct DelegatedApproveMessage {
     pub token_owner_id: ActorId,
     pub approved_actor_id: ActorId,
