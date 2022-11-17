@@ -1,5 +1,7 @@
 use crate::non_fungible_token::{royalties::*, token::*};
-use gstd::{prelude::*, ActorId};
+use gstd::{exec::block_timestamp, prelude::*, ActorId};
+
+use super::user_info::UserInfo;
 
 #[derive(Debug, Default)]
 pub struct NFTState {
@@ -11,6 +13,7 @@ pub struct NFTState {
     pub token_metadata_by_id: BTreeMap<TokenId, Option<TokenMetadata>>,
     pub tokens_for_owner: BTreeMap<ActorId, Vec<TokenId>>,
     pub royalties: Option<Royalties>,
+    pub user_info: BTreeMap<TokenId, UserInfo>,
 }
 
 pub trait NFTStateKeeper {
@@ -27,6 +30,8 @@ pub enum NFTQuery {
     SupplyForOwner { owner: ActorId },
     AllTokens,
     ApprovedTokens { account: ActorId },
+    UserOf { token_id: TokenId },
+    UserExpires { token_id: TokenId },
 }
 
 #[derive(Debug, Decode, Encode, TypeInfo)]
@@ -53,6 +58,12 @@ pub enum NFTQueryReply {
     },
     ApprovedTokens {
         tokens: Vec<Token>,
+    },
+    UserOf {
+        address: ActorId,
+    },
+    UserExpires {
+        expires: u64, // timestamp
     },
 }
 
@@ -119,6 +130,24 @@ pub trait NFTMetaState: NFTStateKeeper {
             .collect()
     }
 
+    fn user_of(&self, token_id: &TokenId) -> ActorId {
+        if let Some(user_info) = self.get().user_info.get(&token_id) {
+            if user_info.expires < block_timestamp() {
+                return user_info.address;
+            }
+        }
+
+        ActorId::zero()
+    }
+
+    fn user_expires(&self, token_id: &TokenId) -> u64 {
+        if let Some(user_info) = self.get().user_info.get(&token_id) {
+            user_info.expires
+        } else {
+            0u64
+        }
+    }
+
     fn proc_state(&self, query: NFTQuery) -> Option<Vec<u8>> {
         let encoded = match query {
             NFTQuery::NFTInfo => NFTQueryReply::NFTInfo {
@@ -143,6 +172,12 @@ pub trait NFTMetaState: NFTStateKeeper {
             },
             NFTQuery::ApprovedTokens { account } => NFTQueryReply::ApprovedTokens {
                 tokens: self.approved_tokens(&account),
+            },
+            NFTQuery::UserOf { token_id } => NFTQueryReply::UserOf {
+                address: self.user_of(&token_id),
+            },
+            NFTQuery::UserExpires { token_id } => NFTQueryReply::UserExpires {
+                expires: self.user_expires(&token_id),
             },
         }
         .encode();

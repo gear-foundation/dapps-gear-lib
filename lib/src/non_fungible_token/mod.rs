@@ -4,3 +4,4 @@ pub mod nft_core;
 pub mod royalties;
 pub mod state;
 pub mod token;
+pub mod user_info;

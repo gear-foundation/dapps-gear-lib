@@ -277,4 +277,32 @@ pub trait NFTCore: NFTStateKeeper {
             panic!("Not allowed to transfer");
         }
     }
+
+    // fn update_user(&mut self, to: &ActorId, token_id: TokenId, expires: u64) {
+    //     let owner = self.internal_transfer(to, token_id);
+    // }
+
+    // fn set_user(
+    //     nft: &Program,
+    //     from: u64,
+    //     address: ActorId,
+    //     token_id: TokenId,
+    //     expires: u64,
+    // ) -> RunResult {
+    //     let payload = NFTAction::SetUser {
+    //         token_id,
+    //         address,
+    //         expires,
+    //     };
+    //     nft.send(from, payload)
+    // }
+
+    // fn user_of(&self, token_id: TokenId) -> RunResult {
+    //     self.
+    // }
+
+    // fn user_expires(nft: &Program, from: u64, token_id: TokenId) -> RunResult {
+    //     let payload = NFTAction::UserExpires { token_id };
+    //     nft.send(from, payload)
+    // }
 }
