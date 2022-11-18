@@ -13,7 +13,7 @@ pub struct NFTState {
     pub token_metadata_by_id: BTreeMap<TokenId, Option<TokenMetadata>>,
     pub tokens_for_owner: BTreeMap<ActorId, Vec<TokenId>>,
     pub royalties: Option<Royalties>,
-    pub user_info: BTreeMap<TokenId, UserInfo>,
+    pub users_info: BTreeMap<TokenId, UserInfo>,
 }
 
 pub trait NFTStateKeeper {
@@ -131,7 +131,7 @@ pub trait NFTMetaState: NFTStateKeeper {
     }
 
     fn user_of(&self, token_id: &TokenId) -> ActorId {
-        if let Some(user_info) = self.get().user_info.get(&token_id) {
+        if let Some(user_info) = self.get().users_info.get(token_id) {
             if user_info.expires < block_timestamp() {
                 return user_info.address;
             }
@@ -141,7 +141,7 @@ pub trait NFTMetaState: NFTStateKeeper {
     }
 
     fn user_expires(&self, token_id: &TokenId) -> u64 {
-        if let Some(user_info) = self.get().user_info.get(&token_id) {
+        if let Some(user_info) = self.get().users_info.get(token_id) {
             user_info.expires
         } else {
             0u64

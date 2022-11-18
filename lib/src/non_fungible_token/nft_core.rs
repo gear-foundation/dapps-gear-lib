@@ -1,6 +1,8 @@
 use crate::non_fungible_token::{delegated::*, io::*, royalties::*, state::*, token::*};
 use gstd::{exec, msg, prelude::*, ActorId};
 
+use super::user_info::UserInfo;
+
 const ZERO_ID: ActorId = ActorId::zero();
 
 pub trait NFTCore: NFTStateKeeper {
@@ -137,6 +139,9 @@ pub trait NFTCore: NFTStateKeeper {
             .and_modify(|tokens| tokens.retain(|&token| token != token_id));
         // remove approvals if any
         self.get_mut().token_approvals.remove(&token_id);
+        // remove UserInfo
+        self.get_mut().users_info.remove(&token_id);
+
         owner
     }
 
@@ -278,31 +283,24 @@ pub trait NFTCore: NFTStateKeeper {
         }
     }
 
-    // fn update_user(&mut self, to: &ActorId, token_id: TokenId, expires: u64) {
-    //     let owner = self.internal_transfer(to, token_id);
-    // }
+    fn set_user(&mut self, address: ActorId, token_id: TokenId, expires: u64) {
+        self.assert_zero_address(&address);
 
-    // fn set_user(
-    //     nft: &Program,
-    //     from: u64,
-    //     address: ActorId,
-    //     token_id: TokenId,
-    //     expires: u64,
-    // ) -> RunResult {
-    //     let payload = NFTAction::SetUser {
-    //         token_id,
-    //         address,
-    //         expires,
-    //     };
-    //     nft.send(from, payload)
-    // }
+        let owner = *self
+            .get()
+            .owner_by_id
+            .get(&token_id)
+            .expect("NonFungibleToken: token does not exist");
 
-    // fn user_of(&self, token_id: TokenId) -> RunResult {
-    //     self.
-    // }
+        // is Approved or Owner
+        if !self.is_approved_to(&msg::source(), token_id) {
+            self.assert_owner(&owner);
+        }
 
-    // fn user_expires(nft: &Program, from: u64, token_id: TokenId) -> RunResult {
-    //     let payload = NFTAction::UserExpires { token_id };
-    //     nft.send(from, payload)
-    // }
+        self.get_mut()
+            .users_info
+            .entry(token_id)
+            .and_modify(|user_info| user_info.expires = expires)
+            .or_insert(UserInfo { address, expires });
+    }
 }

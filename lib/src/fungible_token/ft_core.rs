@@ -68,7 +68,7 @@ pub trait FTCore: FTStateKeeper {
     /// * `from` and `to` MUST be non-zero addresses
     ///
     /// Arguments:
-    /// * `from`: An account from which token will be transerred
+    /// * `from`: An account from which token will be transferred
     /// * `to`: An account to which token will be transferred
     /// * `amount`: The amount of token of be transferred
     fn transfer(&mut self, from: &ActorId, to: &ActorId, amount: u128) {
