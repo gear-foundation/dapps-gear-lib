@@ -3,15 +3,25 @@ use primitive_types::U256;
 
 pub type TokenId = U256;
 
-#[derive(Debug, Default, Decode, Encode, TypeInfo, PartialEq, Eq)]
-pub struct Token {
+#[derive(Debug, Decode, Encode, TypeInfo, PartialEq, Eq)]
+pub struct Token<T: Encode + Decode + TypeInfo + Clone> {
     pub id: TokenId,
     pub owner_id: ActorId,
     pub name: String,
-    pub description: String,
-    pub media: String,
-    pub reference: String,
     pub approved_account_ids: BTreeSet<ActorId>,
+    pub metadata: Option<T>,
+}
+
+impl<T: Encode + Decode + TypeInfo + Clone> Default for Token<T> {
+    fn default() -> Self {
+        Self {
+            id: U256::zero(),
+            owner_id: ActorId::zero(),
+            name: String::new(),
+            approved_account_ids: BTreeSet::new(),
+            metadata: None,
+        }
+    }
 }
 
 #[derive(Debug, Default, Encode, Decode, Clone, TypeInfo, PartialEq, Eq, PartialOrd, Ord)]

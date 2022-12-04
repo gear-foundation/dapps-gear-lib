@@ -3,7 +3,7 @@ use gstd::{exec, msg, prelude::*, ActorId};
 
 const ZERO_ID: ActorId = ActorId::zero();
 
-pub trait NFTCore: NFTStateKeeper {
+pub trait NFTCore<T: Encode + Decode + TypeInfo>: NFTStateKeeper<T> {
     /// Mints a new token
     ///
     /// Requirements:
@@ -14,12 +14,7 @@ pub trait NFTCore: NFTStateKeeper {
     /// * `to`: An account to which minted NFT will be assigned
     /// * `token_id`: the ID of minted NFT
     /// * `token_metadata`: optional additional metadata about NFT
-    fn mint(
-        &mut self,
-        to: &ActorId,
-        token_id: TokenId,
-        token_metadata: Option<TokenMetadata>,
-    ) -> NFTTransfer {
+    fn mint(&mut self, to: &ActorId, token_id: TokenId, token_metadata: Option<T>) -> NFTTransfer {
         self.assert_token_exists(token_id);
         self.assert_zero_address(to);
         self.get_mut().owner_by_id.insert(token_id, *to);

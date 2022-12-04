@@ -2,20 +2,20 @@ use crate::non_fungible_token::{royalties::*, token::*};
 use gstd::{prelude::*, ActorId};
 
 #[derive(Debug, Default)]
-pub struct NFTState {
+pub struct NFTState<T: Encode + Decode + TypeInfo> {
     pub name: String,
     pub symbol: String,
     pub base_uri: String,
     pub owner_by_id: BTreeMap<TokenId, ActorId>,
     pub token_approvals: BTreeMap<TokenId, BTreeSet<ActorId>>,
-    pub token_metadata_by_id: BTreeMap<TokenId, Option<TokenMetadata>>,
+    pub token_metadata_by_id: BTreeMap<TokenId, Option<T>>,
     pub tokens_for_owner: BTreeMap<ActorId, Vec<TokenId>>,
     pub royalties: Option<Royalties>,
 }
 
-pub trait NFTStateKeeper {
-    fn get(&self) -> &NFTState;
-    fn get_mut(&mut self) -> &mut NFTState;
+pub trait NFTStateKeeper<T: Encode + Decode + TypeInfo> {
+    fn get(&self) -> &NFTState<T>;
+    fn get_mut(&mut self) -> &mut NFTState<T>;
 }
 
 #[derive(Debug, Decode, Encode, TypeInfo)]
@@ -30,17 +30,17 @@ pub enum NFTQuery {
 }
 
 #[derive(Debug, Decode, Encode, TypeInfo)]
-pub enum NFTQueryReply {
+pub enum NFTQueryReply<T: Encode + Decode + TypeInfo + Clone> {
     NFTInfo {
         name: String,
         symbol: String,
         base_uri: String,
     },
     Token {
-        token: Token,
+        token: Token<T>,
     },
     TokensForOwner {
-        tokens: Vec<Token>,
+        tokens: Vec<Token<T>>,
     },
     TotalSupply {
         total_supply: u128,
@@ -49,16 +49,16 @@ pub enum NFTQueryReply {
         supply: u128,
     },
     AllTokens {
-        tokens: Vec<Token>,
+        tokens: Vec<Token<T>>,
     },
     ApprovedTokens {
-        tokens: Vec<Token>,
+        tokens: Vec<Token<T>>,
     },
 }
 
-pub trait NFTMetaState: NFTStateKeeper {
-    fn token(&self, token_id: TokenId) -> Token {
-        let mut token = Token::default();
+pub trait NFTMetaState<T: Encode + Decode + TypeInfo + Clone>: NFTStateKeeper<T> {
+    fn token(&self, token_id: TokenId) -> Token<T> {
+        let mut token: Token<T> = Default::default();
         if let Some(owner_id) = self.get().owner_by_id.get(&token_id) {
             token.id = token_id;
             token.owner_id = *owner_id;
@@ -67,16 +67,13 @@ pub trait NFTMetaState: NFTStateKeeper {
             token.approved_account_ids = approved_account_ids.clone();
         }
         if let Some(Some(metadata)) = self.get().token_metadata_by_id.get(&token_id) {
-            token.name = metadata.name.clone();
-            token.description = metadata.description.clone();
-            token.media = metadata.media.clone();
-            token.reference = metadata.reference.clone();
+            token.metadata = Some(metadata.clone());
         }
         token
     }
 
-    fn tokens_for_owner(&self, owner: &ActorId) -> Vec<Token> {
-        let mut tokens: Vec<Token> = Vec::new();
+    fn tokens_for_owner(&self, owner: &ActorId) -> Vec<Token<T>> {
+        let mut tokens: Vec<Token<T>> = Vec::new();
         if let Some(token_ids) = self.get().tokens_for_owner.get(owner) {
             for token_id in token_ids {
                 tokens.push(self.token(*token_id));
@@ -96,14 +93,14 @@ pub trait NFTMetaState: NFTStateKeeper {
             .map(|tokens| tokens.len() as u128)
             .unwrap_or(0)
     }
-    fn all_tokens(&self) -> Vec<Token> {
+    fn all_tokens(&self) -> Vec<Token<T>> {
         self.get()
             .owner_by_id
             .keys()
             .map(|id| self.token(*id))
             .collect()
     }
-    fn approved_tokens(&self, account: &ActorId) -> Vec<Token> {
+    fn approved_tokens(&self, account: &ActorId) -> Vec<Token<T>> {
         self.get()
             .owner_by_id
             .keys()
