@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ## [0.3.4] - 2022-12-12
 ### Added
-- Derived the `Clone` & `Copy` traits for NFT's IO types.
+- Derived the `Clone` trait for NFT's IO types.
 
 ## [0.3.3] - 2022-12-03
 ### Added

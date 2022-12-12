@@ -1,7 +1,7 @@
 use crate::non_fungible_token::{royalties::*, token::*};
 use gstd::{prelude::*, ActorId};
 
-#[derive(Debug, Encode, Decode, TypeInfo, PartialEq, Eq, Clone, Copy)]
+#[derive(Debug, Encode, Decode, TypeInfo, PartialEq, Eq, Clone)]
 pub struct NFTTransfer {
     pub from: ActorId,
     pub to: ActorId,
@@ -16,7 +16,7 @@ pub struct NFTTransferPayout {
     pub payouts: Payout,
 }
 
-#[derive(Debug, Encode, Decode, TypeInfo, PartialEq, Eq, Clone, Copy)]
+#[derive(Debug, Encode, Decode, TypeInfo, PartialEq, Eq, Clone)]
 pub struct NFTApproval {
     pub owner: ActorId,
     pub approved_account: ActorId,
