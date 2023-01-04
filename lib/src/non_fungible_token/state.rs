@@ -2,7 +2,7 @@ use crate::non_fungible_token::{royalties::*, token::*};
 use gstd::{prelude::*, ActorId};
 use hashbrown::{HashMap, HashSet};
 
-#[derive(Debug, Default)]
+#[derive(Debug, Clone, Default)]
 pub struct NFTState {
     pub name: String,
     pub symbol: String,
