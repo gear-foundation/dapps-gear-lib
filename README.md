@@ -13,10 +13,11 @@
 [docs_badge]: https://img.shields.io/badge/docs-online-5023dd
 [docs_href]: https://dapps.gear.rs/gear_lib
 
-This library provides a default implementation for the following contracts:
+This library provides standard functions used in the implementation of contracts
 - fungible token
 - non fungible token
 - multitoken
+- etc
 
 To use the default implementation you should include the packages into your Cargo.toml file:
 ```toml
