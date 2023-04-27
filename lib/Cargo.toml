@@ -7,7 +7,7 @@ authors = ["Gear Technologies"]
 
 [dependencies]
 codec = { package = "parity-scale-codec", version = "3.4", default-features = false }
-gstd = { git = "https://github.com/gear-tech/gear.git", rev = "5c685d0f15c412ab6ee019ceaf7ce084426dfb68" }
+gstd = { git = "https://github.com/gear-tech/gear.git", rev = "663e38a61ee7af2097d6b114c853b5df68c8fe09" }
 primitive-types = { version = "0.12", default-features = false, features = ["scale-info"] }
 scale-info = { version = "2", default-features = false }
 sr25519 = { package = "gear-lib-sr25519", path = "../sr25519" }
