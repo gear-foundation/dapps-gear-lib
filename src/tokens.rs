@@ -1,8 +1,8 @@
 //! Basic token implementations & primitives.
 
 pub mod fungible;
-pub mod non_fungible;
 pub mod multi;
+pub mod non_fungible;
 pub mod types;
 
 #[cfg(test)]
