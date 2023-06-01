@@ -134,16 +134,17 @@ impl NFTState {
         Ok(NFTTransfer { from, to, id })
     }
 
-    /// Allows or disallows `operator` to transfer all [`msg::source()`]'s
-    /// tokens or only the one with given `id`.
+    /// Allows or disallows `operator` to transfer the token with given `id` or
+    /// all [`msg::source()`]'s tokens.
     ///
     /// - If `id` is [`Some`], sets an approval only for the token with this
     /// `id`.
-    /// - If `id` is [`None`], sets an approval for all [`msg::source()`]'s
-    /// tokens.
     ///
     /// If [`msg::source()`] is an operator of all tokens of the owner of the
-    /// token with given `id`, [`msg::source()`] can also set approval for them.
+    /// token with given `id`, [`msg::source()`] can set approval any for them.
+    ///
+    /// - If `id` is [`None`], sets an approval for all [`msg::source()`]'s
+    /// tokens.
     ///
     /// # Errors
     /// - [`NFTError::ZeroRecipientAddress`] if `operator` is

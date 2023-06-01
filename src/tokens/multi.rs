@@ -4,6 +4,8 @@ use super::types::{Amount, Id, Operator, Owner};
 use gstd::{cell::Cell, prelude::*, ActorId};
 use hashbrown::{HashMap, HashSet};
 
+pub mod encodable;
+
 #[cfg(test)]
 use super::test_helper::msg;
 #[cfg(not(test))]
@@ -271,30 +273,32 @@ impl MTState {
 
     /// Returns an allowance of `owner`'s tokens for `operator`.
     ///
-    /// - If `id` is [`Some`], returns an approved amount of the tokens with
-    /// this `id`.
-    /// - If `id` is [`None`], returns [`Amount::MAX`] if `operator` is approved
-    /// for all `owner`s tokens, otherwise returns 0.
+    /// - If `id` is [`Some`], firstly checks if `operator` is allowed for all
+    /// `owner`'s tokens, and if not, returns an approved amount of the tokens
+    /// with this `id`.
+    /// - If `operator` is allowed for all `owner`'s tokens, returns
+    /// [`Amount::MAX`], otherwise returns 0.
+    /// - If `id` is [`None`], only checks if `operator` is allowed for all
+    /// `owner`'s tokens.
     pub fn allowance(&self, owner: Owner, operator: Operator, id: Option<&Id>) -> Amount {
-        id.map_or_else(
-            || {
-                self.owners.get(&owner).and_then(|general_owner_data| {
-                    general_owner_data
-                        .operators
-                        .contains(&operator)
-                        .then_some(Amount::MAX)
-                })
-            },
-            |unwrapped_id| {
-                self.tokens
-                    .get(unwrapped_id)
-                    .and_then(|token| token.owners.get(&owner))
-                    .and_then(|token_owner_data| {
-                        token_owner_data.allowances.get(&operator).map(Cell::get)
+        self.owners
+            .get(&owner)
+            .and_then(|general_owner_data| {
+                general_owner_data
+                    .operators
+                    .contains(&operator)
+                    .then_some(Amount::MAX)
+                    .or_else(|| {
+                        id.and_then(|unwrapped_id| {
+                            self.tokens.get(unwrapped_id).and_then(|token| {
+                                token.owners.get(&owner).and_then(|token_owner_data| {
+                                    token_owner_data.allowances.get(&operator).map(Cell::get)
+                                })
+                            })
+                        })
                     })
-            },
-        )
-        .unwrap_or_default()
+            })
+            .unwrap_or_default()
     }
 
     /// Transfers `amount` of the tokens with given `id` from [`msg::source()`]
@@ -867,7 +871,7 @@ mod tests {
         );
         assert_eq!(
             state.allowance(1.into(), 2.into(), Some(&0u8.into())),
-            AMOUNT.into()
+            Amount::MAX
         );
         assert_eq!(state.allowance(1.into(), 2.into(), None), Amount::MAX);
 
@@ -883,7 +887,7 @@ mod tests {
         );
         assert_eq!(
             state.allowance(1.into(), 2.into(), Some(&0u8.into())),
-            REMAINDER.into()
+            Amount::MAX
         );
         assert_eq!(state.allowance(1.into(), 2.into(), None), Amount::MAX);
     }

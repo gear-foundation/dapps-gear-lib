@@ -21,9 +21,6 @@ jobs:
       - name: Artifact cache
         uses: Swatinem/rust-cache@v1
 
-      - name: Install nightly toolchain
-        run: rustup show
-
       - name: Check fmt
         run: cargo fmt --all --check
 
