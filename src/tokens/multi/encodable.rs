@@ -47,17 +47,17 @@ impl MTState {
                     })
             },
             |unwrapped_id| {
-                self.tokens.iter().find_map(|(stored_id, token)| {
-                    (stored_id == unwrapped_id).then_some(
+                self.tokens
+                    .iter()
+                    .find(|(stored_id, _)| stored_id == unwrapped_id)
+                    .and_then(|(_, token)| {
                         token
                             .owners
                             .iter()
                             .find_map(|(stored_owner, token_owner_data)| {
                                 (*stored_owner == owner).then_some(token_owner_data.balance)
                             })
-                            .unwrap_or_default(),
-                    )
-                })
+                    })
             },
         )
         .unwrap_or_default()
@@ -73,41 +73,39 @@ impl MTState {
     /// - If `id` is [`None`], only checks if `operator` is allowed for all
     /// `owner`'s tokens.
     pub fn allowance(&self, owner: Owner, operator: Operator, id: Option<&Id>) -> Amount {
+        let owner_search = |(_, token): &(_, Token)| {
+            token
+                .owners
+                .iter()
+                .find(|(stored_owner, _)| *stored_owner == owner)
+                .and_then(|(_, token_owner_data)| {
+                    token_owner_data
+                        .allowances
+                        .iter()
+                        .find_map(|(stored_operator, allowance)| {
+                            (*stored_operator == operator).then_some(*allowance)
+                        })
+                })
+        };
+
         let id_search = || {
             id.and_then(|unwrapped_id| {
-                self.tokens.iter().find_map(|(stored_id, token)| {
-                    (stored_id == unwrapped_id).then_some(
-                        token
-                            .owners
-                            .iter()
-                            .find_map(|(stored_owner, token_owner_data)| {
-                                (*stored_owner == owner).then_some(
-                                    token_owner_data
-                                        .allowances
-                                        .iter()
-                                        .find_map(|(stored_operator, allowance)| {
-                                            (*stored_operator == operator).then_some(*allowance)
-                                        })
-                                        .unwrap_or_default(),
-                                )
-                            })
-                            .unwrap_or_default(),
-                    )
-                })
+                self.tokens
+                    .iter()
+                    .find(|(stored_id, _)| stored_id == unwrapped_id)
+                    .and_then(owner_search)
             })
         };
 
         self.owners
             .iter()
-            .find_map(|(stored_owner, general_owner_data)| {
-                (*stored_owner == owner).then_some(
-                    general_owner_data
-                        .operators
-                        .contains(&operator)
-                        .then_some(Amount::MAX)
-                        .or_else(id_search)
-                        .unwrap_or_default(),
-                )
+            .find(|(stored_owner, _)| *stored_owner == owner)
+            .and_then(|(_, general_owner_data)| {
+                general_owner_data
+                    .operators
+                    .contains(&operator)
+                    .then_some(Amount::MAX)
+                    .or_else(id_search)
             })
             .unwrap_or_default()
     }

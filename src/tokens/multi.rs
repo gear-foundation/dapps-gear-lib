@@ -281,6 +281,16 @@ impl MTState {
     /// - If `id` is [`None`], only checks if `operator` is allowed for all
     /// `owner`'s tokens.
     pub fn allowance(&self, owner: Owner, operator: Operator, id: Option<&Id>) -> Amount {
+        let id_search = || {
+            id.and_then(|unwrapped_id| {
+                self.tokens.get(unwrapped_id).and_then(|token| {
+                    token.owners.get(&owner).and_then(|token_owner_data| {
+                        token_owner_data.allowances.get(&operator).map(Cell::get)
+                    })
+                })
+            })
+        };
+
         self.owners
             .get(&owner)
             .and_then(|general_owner_data| {
@@ -288,15 +298,7 @@ impl MTState {
                     .operators
                     .contains(&operator)
                     .then_some(Amount::MAX)
-                    .or_else(|| {
-                        id.and_then(|unwrapped_id| {
-                            self.tokens.get(unwrapped_id).and_then(|token| {
-                                token.owners.get(&owner).and_then(|token_owner_data| {
-                                    token_owner_data.allowances.get(&operator).map(Cell::get)
-                                })
-                            })
-                        })
-                    })
+                    .or_else(id_search)
             })
             .unwrap_or_default()
     }

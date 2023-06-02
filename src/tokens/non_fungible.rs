@@ -85,14 +85,15 @@ impl NFTState {
         owner: Owner,
         operator: Operator,
     ) -> bool {
+        let id_search = || {
+            tokens_and_id
+                .map(|(tokens, id)| tokens.get(id).unwrap().approvals.contains(&operator))
+                .unwrap_or_default()
+        };
+
         owners
             .get(&owner)
-            .map(|token_owner| {
-                token_owner.operators.contains(&operator)
-                    || tokens_and_id
-                        .map(|(tokens, id)| tokens.get(id).unwrap().approvals.contains(&operator))
-                        .unwrap_or_default()
-            })
+            .map(|token_owner| token_owner.operators.contains(&operator) || id_search())
             .unwrap_or_default()
     }
 

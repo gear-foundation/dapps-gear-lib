@@ -31,16 +31,14 @@ impl FTState {
     pub fn allowance(&self, owner: Owner, operator: Operator) -> Amount {
         self.owners
             .iter()
-            .find_map(|(stored_owner, owner_data)| {
-                (*stored_owner == owner).then(|| {
-                    owner_data
-                        .allowances
-                        .iter()
-                        .find_map(|(stored_operator, allowance)| {
-                            (*stored_operator == operator).then_some(*allowance)
-                        })
-                        .unwrap_or_default()
-                })
+            .find(|(stored_owner, _)| *stored_owner == owner)
+            .and_then(|(_, owner_data)| {
+                owner_data
+                    .allowances
+                    .iter()
+                    .find_map(|(stored_operator, allowance)| {
+                        (*stored_operator == operator).then_some(*allowance)
+                    })
             })
             .unwrap_or_default()
     }
