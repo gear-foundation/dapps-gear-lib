@@ -435,8 +435,6 @@ pub struct Action<T> {
     pub kind: ActionKind,
 }
 
-pub type ActionS = Action<String>;
-
 impl<T> Action<T> {
     pub const fn new(action: T) -> Self {
         Self {
