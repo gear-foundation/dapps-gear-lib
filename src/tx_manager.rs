@@ -435,6 +435,8 @@ pub struct Action<T> {
     pub kind: ActionKind,
 }
 
+pub type ActionS = Action<String>;
+
 impl<T> Action<T> {
     pub const fn new(action: T) -> Self {
         Self {
@@ -443,7 +445,7 @@ impl<T> Action<T> {
         }
     }
 
-    pub fn to_retry(self) -> Self {
+    pub fn into_retry(self) -> Self {
         Self {
             action: self.action,
             kind: ActionKind::Retry,

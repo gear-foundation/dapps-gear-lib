@@ -11,6 +11,48 @@ use super::test_helper::msg;
 #[cfg(not(test))]
 use gstd::msg;
 
+/// The non-fungible token transfer event.
+#[derive(Debug, Encode, Decode, PartialEq, Eq, PartialOrd, Ord, Clone, TypeInfo, Hash)]
+pub struct NFTTransfer {
+    /// A sender address.
+    ///
+    /// It equals [`ActorId::zero()`], if it's retrieved after token minting.
+    pub from: ActorId,
+    /// A recipient address.
+    ///
+    /// It equals [`ActorId::zero()`], if it's retrieved after token burning.
+    pub to: ActorId,
+    /// A token ID.
+    pub id: Id,
+}
+
+/// The non-fungible token approval event.
+#[derive(Debug, Encode, Decode, PartialEq, Eq, PartialOrd, Ord, Clone, TypeInfo)]
+pub struct NFTApproval {
+    pub owner: Owner,
+    pub operator: Operator,
+    /// If it's [`Some`], it means this approval is only for the token with this
+    /// `id`, if it's [`None`] - this approval is for all `owner`s tokens.
+    pub id: Option<Id>,
+    pub approved: bool,
+}
+
+/// Non-fungible token error variants.
+#[derive(Debug, Encode, Decode, PartialEq, Eq, PartialOrd, Ord, Clone, Copy, TypeInfo, Hash)]
+pub enum NFTError {
+    /// [`msg::source()`] doesn't have any allowance to make a transfer/approval
+    /// for the token.
+    NotApproved,
+    /// The token already exists.
+    TokenExists,
+    /// The token doesn't exist.
+    TokenNotExists,
+    /// A recipient/operator address is [`ActorId::zero()`].
+    ZeroRecipientAddress,
+    /// A sender address is [`ActorId::zero()`].
+    ZeroSenderAddress,
+}
+
 #[derive(Default, Debug, PartialEq, Eq, Clone)]
 struct Token {
     owner: Owner,
@@ -308,48 +350,6 @@ impl NFTState {
             .ok_or(NFTError::TokenNotExists)
             .map(|token| token.attributes.insert(key, value))
     }
-}
-
-/// The non-fungible token transfer event.
-#[derive(Debug, Encode, Decode, PartialEq, Eq, PartialOrd, Ord, Clone, TypeInfo, Hash)]
-pub struct NFTTransfer {
-    /// A sender address.
-    ///
-    /// It equals [`ActorId::zero()`], if it's retrieved after token minting.
-    pub from: ActorId,
-    /// A recipient address.
-    ///
-    /// It equals [`ActorId::zero()`], if it's retrieved after token burning.
-    pub to: ActorId,
-    /// A token ID.
-    pub id: Id,
-}
-
-/// The non-fungible token approval event.
-#[derive(Debug, Encode, Decode, PartialEq, Eq, PartialOrd, Ord, Clone, TypeInfo)]
-pub struct NFTApproval {
-    pub owner: Owner,
-    pub operator: Operator,
-    /// If it's [`Some`], it means this approval is only for the token with this
-    /// `id`, if it's [`None`] - this approval is for all `owner`s tokens.
-    pub id: Option<Id>,
-    pub approved: bool,
-}
-
-/// Non-fungible token error variants.
-#[derive(Debug, Encode, Decode, PartialEq, Eq, PartialOrd, Ord, Clone, Copy, TypeInfo, Hash)]
-pub enum NFTError {
-    /// [`msg::source()`] doesn't have any allowance to make a transfer/approval
-    /// for the token.
-    NotApproved,
-    /// The token already exists.
-    TokenExists,
-    /// The token doesn't exist.
-    TokenNotExists,
-    /// A recipient/operator address is [`ActorId::zero()`].
-    ZeroRecipientAddress,
-    /// A sender address is [`ActorId::zero()`].
-    ZeroSenderAddress,
 }
 
 #[cfg(test)]

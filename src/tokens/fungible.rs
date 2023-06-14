@@ -12,6 +12,49 @@ use gstd::msg;
 pub mod encodable;
 pub mod extensions;
 
+/// The fungible token transfer event.
+#[derive(
+    Default, Debug, Encode, Decode, PartialEq, Eq, PartialOrd, Ord, Clone, Copy, TypeInfo, Hash,
+)]
+pub struct FTTransfer {
+    /// A sender address.
+    ///
+    /// It equals [`ActorId::zero()`], if it's retrieved after token minting.
+    pub from: ActorId,
+    /// A recipient address.
+    ///
+    /// It equals [`ActorId::zero()`], if it's retrieved after token burning.
+    pub to: ActorId,
+    pub amount: Amount,
+}
+
+/// The fungible token approval event.
+#[derive(
+    Default, Debug, Encode, Decode, PartialEq, Eq, PartialOrd, Ord, Clone, Copy, TypeInfo, Hash,
+)]
+pub struct FTApproval {
+    pub owner: Owner,
+    pub operator: Operator,
+    /// An amount of a total token allowance.
+    pub amount: Amount,
+}
+
+/// Fungible token error variants.
+#[derive(Debug, Encode, Decode, PartialEq, Eq, PartialOrd, Ord, Clone, Copy, TypeInfo, Hash)]
+pub enum FTError {
+    /// Token owner doesn't have a sufficient amount of tokens. Or there was the
+    /// [`Amount`] overflow during token minting.
+    InsufficientAmount,
+    /// [`msg::source()`] or operator doesn't have a sufficient allowance of
+    /// tokens. Or there was the [`Amount`] overflow during allowance
+    /// increasing.
+    InsufficientAllowance,
+    /// A recipient/operator address is [`ActorId::zero()`].
+    ZeroRecipientAddress,
+    /// A sender address is [`ActorId::zero()`].
+    ZeroSenderAddress,
+}
+
 #[derive(Default, Debug, PartialEq, Eq, Clone)]
 struct OwnerData {
     balance: Amount,
@@ -264,49 +307,6 @@ impl FTState {
             amount,
         })
     }
-}
-
-/// Fungible token error variants.
-#[derive(Debug, Encode, Decode, PartialEq, Eq, PartialOrd, Ord, Clone, Copy, TypeInfo, Hash)]
-pub enum FTError {
-    /// Token owner doesn't have a sufficient amount of tokens. Or there was the
-    /// [`Amount`] overflow during token minting.
-    InsufficientAmount,
-    /// [`msg::source()`] or operator doesn't have a sufficient allowance of
-    /// tokens. Or there was the [`Amount`] overflow during allowance
-    /// increasing.
-    InsufficientAllowance,
-    /// A recipient/operator address is [`ActorId::zero()`].
-    ZeroRecipientAddress,
-    /// A sender address is [`ActorId::zero()`].
-    ZeroSenderAddress,
-}
-
-/// The fungible token transfer event.
-#[derive(
-    Default, Debug, Encode, Decode, PartialEq, Eq, PartialOrd, Ord, Clone, Copy, TypeInfo, Hash,
-)]
-pub struct FTTransfer {
-    /// A sender address.
-    ///
-    /// It equals [`ActorId::zero()`], if it's retrieved after token minting.
-    pub from: ActorId,
-    /// A recipient address.
-    ///
-    /// It equals [`ActorId::zero()`], if it's retrieved after token burning.
-    pub to: ActorId,
-    pub amount: Amount,
-}
-
-/// The fungible token approval event.
-#[derive(
-    Default, Debug, Encode, Decode, PartialEq, Eq, PartialOrd, Ord, Clone, Copy, TypeInfo, Hash,
-)]
-pub struct FTApproval {
-    pub owner: Owner,
-    pub operator: Operator,
-    /// An amount of a total token allowance.
-    pub amount: Amount,
 }
 
 #[cfg(test)]

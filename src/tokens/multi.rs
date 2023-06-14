@@ -11,6 +11,65 @@ use super::test_helper::msg;
 #[cfg(not(test))]
 use gstd::msg;
 
+/// The approval types.
+#[derive(Debug, Encode, Decode, PartialEq, Eq, PartialOrd, Ord, Clone, TypeInfo, Hash)]
+pub enum ApproveType {
+    /// Approval for all tokens.
+    Operator(bool),
+    /// Approval for specific amount of the tokens with specific ID.
+    Allowance((Id, Amount)),
+}
+
+/// The multi token transfer event.
+#[derive(Debug, Encode, Decode, PartialEq, Eq, PartialOrd, Ord, Clone, TypeInfo, Hash)]
+pub struct MTTransfer {
+    /// A sender address.
+    ///
+    /// It equals [`ActorId::zero()`], if it's retrieved after token minting.
+    pub from: ActorId,
+    /// A recipient address.
+    ///
+    /// It equals [`ActorId::zero()`], if it's retrieved after token burning.
+    pub to: ActorId,
+    /// A tokens ID.
+    pub id: Id,
+    pub amount: Amount,
+}
+
+/// The multi token batch transfer event.
+#[derive(Default, Debug, Encode, Decode, PartialEq, Eq, PartialOrd, Ord, Clone, TypeInfo, Hash)]
+pub struct MTTransferBatch {
+    /// A sender address.
+    pub from: ActorId,
+    /// A recipient address.
+    pub to: ActorId,
+    /// Pairs of a tokens ID & token amount.
+    pub ids_for_amount: Vec<(Id, Amount)>,
+}
+
+/// The multi token approval event.
+#[derive(Debug, Encode, Decode, PartialEq, Eq, PartialOrd, Ord, Clone, TypeInfo, Hash)]
+pub struct MTApproval {
+    pub owner: ActorId,
+    pub operator: Operator,
+    pub approved: ApproveType,
+}
+
+/// Multi token error variants.
+#[derive(Debug, Encode, Decode, PartialEq, Eq, PartialOrd, Ord, Clone, Copy, TypeInfo, Hash)]
+pub enum MTError {
+    /// [`msg::source()`] doesn't have allowance to transfer tokens with given
+    /// IDs.
+    NotApproved,
+    /// A recipient/operator address is [`ActorId::zero()`].
+    ZeroRecipientAddress,
+    /// A sender address is [`ActorId::zero()`].
+    ZeroSenderAddress,
+    /// Token owner doesn't have a sufficient amount of tokens. Or there was the
+    /// [`Amount`] overflow during token minting/burning.
+    InsufficientAmount,
+}
+
 #[derive(Default, Debug, PartialEq, Eq, Clone)]
 struct TokenOwnerData {
     allowances: HashMap<Operator, Cell<Amount>>,
@@ -601,65 +660,6 @@ impl<'state> From<(&'state Cell<Amount>, &'state Cell<Amount>, &'state Amount)>
             amount: value.2,
         }
     }
-}
-
-/// The approval types.
-#[derive(Debug, Encode, Decode, PartialEq, Eq, PartialOrd, Ord, Clone, TypeInfo, Hash)]
-pub enum ApproveType {
-    /// Approval for all tokens.
-    Operator(bool),
-    /// Approval for specific amount of the tokens with specific ID.
-    Allowance((Id, Amount)),
-}
-
-/// The multi token transfer event.
-#[derive(Debug, Encode, Decode, PartialEq, Eq, PartialOrd, Ord, Clone, TypeInfo, Hash)]
-pub struct MTTransfer {
-    /// A sender address.
-    ///
-    /// It equals [`ActorId::zero()`], if it's retrieved after token minting.
-    pub from: ActorId,
-    /// A recipient address.
-    ///
-    /// It equals [`ActorId::zero()`], if it's retrieved after token burning.
-    pub to: ActorId,
-    /// A tokens ID.
-    pub id: Id,
-    pub amount: Amount,
-}
-
-/// The multi token batch transfer event.
-#[derive(Default, Debug, Encode, Decode, PartialEq, Eq, PartialOrd, Ord, Clone, TypeInfo, Hash)]
-pub struct MTTransferBatch {
-    /// A sender address.
-    pub from: ActorId,
-    /// A recipient address.
-    pub to: ActorId,
-    /// Pairs of a tokens ID & token amount.
-    pub ids_for_amount: Vec<(Id, Amount)>,
-}
-
-/// The multi token approval event.
-#[derive(Debug, Encode, Decode, PartialEq, Eq, PartialOrd, Ord, Clone, TypeInfo, Hash)]
-pub struct MTApproval {
-    pub owner: ActorId,
-    pub operator: Operator,
-    pub approved: ApproveType,
-}
-
-/// Multi token error variants.
-#[derive(Debug, Encode, Decode, PartialEq, Eq, PartialOrd, Ord, Clone, Copy, TypeInfo, Hash)]
-pub enum MTError {
-    /// [`msg::source()`] doesn't have allowance to transfer tokens with given
-    /// IDs.
-    NotApproved,
-    /// A recipient/operator address is [`ActorId::zero()`].
-    ZeroRecipientAddress,
-    /// A sender address is [`ActorId::zero()`].
-    ZeroSenderAddress,
-    /// Token owner doesn't have a sufficient amount of tokens. Or there was the
-    /// [`Amount`] overflow during token minting/burning.
-    InsufficientAmount,
 }
 
 #[cfg(test)]
