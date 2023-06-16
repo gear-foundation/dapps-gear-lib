@@ -466,7 +466,7 @@ pub enum ActionKind {
 
 impl ActionKind {
     /// Converts [`ActionKind`] to [`TransactionKind`].
-    pub fn to_tx_kind<T>(self, tx_data: T) -> TransactionKind<T> {
+    pub fn into_tx_kind<T>(self, tx_data: T) -> TransactionKind<T> {
         match self {
             Self::New => TransactionKind::New(tx_data),
             Self::Retry => TransactionKind::Retry,
