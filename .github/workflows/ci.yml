@@ -1,4 +1,4 @@
-name: Build
+name: CI
 
 on:
   push:
@@ -21,17 +21,11 @@ jobs:
       - name: Artifact cache
         uses: Swatinem/rust-cache@v1
 
-      - name: Pin toolchain
-        run: make init
-
       - name: Check fmt
-        run: make fmt-check
+        run: cargo fmt --all --check
 
       - name: Run linter
-        run: make linter
-
-      - name: Build
-        run: make build
+        run: cargo clippy
 
       - name: Run tests
-        run: make test
+        run: cargo t
