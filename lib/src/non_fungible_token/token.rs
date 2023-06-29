@@ -10,7 +10,7 @@ pub struct Token {
     pub name: String,
     pub description: String,
     pub media: String,
-    pub reference: String,
+    pub attributes: Vec<String>,
     pub approved_account_ids: BTreeSet<ActorId>,
 }
 
@@ -22,6 +22,5 @@ pub struct TokenMetadata {
     pub description: String,
     // URL to associated media, preferably to decentralized, content-addressed storage
     pub media: String,
-    // URL to an off-chain JSON file with more info.
-    pub reference: String,
+    pub attributes: Vec<String>,
 }

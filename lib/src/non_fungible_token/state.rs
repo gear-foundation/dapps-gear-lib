@@ -71,7 +71,7 @@ pub trait NFTMetaState: NFTStateKeeper {
             token.name = metadata.name.clone();
             token.description = metadata.description.clone();
             token.media = metadata.media.clone();
-            token.reference = metadata.reference.clone();
+            token.attributes = metadata.attributes.clone();
         }
         token
     }
