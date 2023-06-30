@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":["fungible_token","multitoken","non_fungible_token"]};

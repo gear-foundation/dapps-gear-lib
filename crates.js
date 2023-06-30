@@ -1,0 +1,1 @@
+window.ALL_CRATES = ["gear_lib","gear_lib_derive","gear_lib_macros","gear_lib_sr25519"];

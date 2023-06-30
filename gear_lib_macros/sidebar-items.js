@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"macro":["declare_derive_storage_trait","declare_impl_trait"]};

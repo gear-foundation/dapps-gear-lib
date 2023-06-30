@@ -1,0 +1,3 @@
+(function() {var implementors = {
+"gear_lib":[["impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/cmp/trait.PartialOrd.html\" title=\"trait core::cmp::PartialOrd\">PartialOrd</a>&lt;<a class=\"struct\" href=\"gear_lib/non_fungible_token/token/struct.TokenMetadata.html\" title=\"struct gear_lib::non_fungible_token::token::TokenMetadata\">TokenMetadata</a>&gt; for <a class=\"struct\" href=\"gear_lib/non_fungible_token/token/struct.TokenMetadata.html\" title=\"struct gear_lib::non_fungible_token::token::TokenMetadata\">TokenMetadata</a>"]]
+};if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

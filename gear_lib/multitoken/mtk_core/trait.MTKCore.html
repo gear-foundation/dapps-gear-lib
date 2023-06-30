@@ -1,0 +1,120 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `MTKCore` trait in crate `gear_lib`."><title>MTKCore in gear_lib::multitoken::mtk_core - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-ba5701c5741a7b69.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="gear_lib" data-themes="" data-resource-suffix="" data-rustdoc-version="1.71.0-nightly (f5559e338 2023-04-24)" data-search-js="search-618e954b235f6acc.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-6f6ffb5395b17c6e.css" data-theme-light-css="light-0f8c037637f9eb3e.css" data-theme-dark-css="dark-1097f8e92a01e3cf.css" data-theme-ayu-css="ayu-614652228113ac93.css" ></div><script src="../../../static.files/storage-62ce34ea385b278a.js"></script><script defer src="sidebar-items.js"></script><script defer src="../../../static.files/main-f0540c1d82cde29b.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../../static.files/light-0f8c037637f9eb3e.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../../static.files/dark-1097f8e92a01e3cf.css"><link rel="stylesheet" href="../../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc trait"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="logo-container" href="../../../gear_lib/index.html"><img class="rust-logo" src="../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><h2></h2></nav><nav class="sidebar"><a class="logo-container" href="../../../gear_lib/index.html"><img class="rust-logo" src="../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><h2 class="location"><a href="#">MTKCore</a></h2><div class="sidebar-elems"><section><h3><a href="#provided-methods">Provided Methods</a></h3><ul class="block"><li><a href="#method.approve">approve</a></li><li><a href="#method.assert_approved">assert_approved</a></li><li><a href="#method.assert_can_burn">assert_can_burn</a></li><li><a href="#method.assert_can_transfer">assert_can_transfer</a></li><li><a href="#method.balance_of">balance_of</a></li><li><a href="#method.burn">burn</a></li><li><a href="#method.burn_impl">burn_impl</a></li><li><a href="#method.mint">mint</a></li><li><a href="#method.mint_impl">mint_impl</a></li><li><a href="#method.revoke_approval">revoke_approval</a></li><li><a href="#method.transfer_from">transfer_from</a></li><li><a href="#method.transfer_from_impl">transfer_from_impl</a></li></ul><h3><a href="#implementors">Implementors</a></h3></section><h2><a href="index.html">In gear_lib::multitoken::mtk_core</a></h2></div></nav><main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Trait <a href="../../index.html">gear_lib</a>::<wbr><a href="../index.html">multitoken</a>::<wbr><a href="index.html">mtk_core</a>::<wbr><a class="trait" href="#">MTKCore</a><button id="copy-path" title="Copy item path to clipboard"><img src="../../../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="srclink" href="../../../src/gear_lib/multitoken/mtk_core.rs.html#6-270">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><pre class="rust item-decl"><code>pub trait MTKCore: <a class="trait" href="../state/trait.StateKeeper.html" title="trait gear_lib::multitoken::state::StateKeeper">StateKeeper</a> + <a class="trait" href="../state/trait.MTKTokenState.html" title="trait gear_lib::multitoken::state::MTKTokenState">MTKTokenState</a> {
+    // Provided methods
+    fn <a href="#method.assert_can_burn" class="fn">assert_can_burn</a>(&amp;mut self, owner: &amp;ActorId, id: &amp;<a class="type" href="../io/type.TokenId.html" title="type gear_lib::multitoken::io::TokenId">TokenId</a>, amount: <a class="primitive" href="https://doc.rust-lang.org/nightly/core/primitive.u128.html">u128</a>) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.assert_can_transfer" class="fn">assert_can_transfer</a>(&amp;self, from: &amp;ActorId, id: &amp;<a class="primitive" href="https://doc.rust-lang.org/nightly/core/primitive.u128.html">u128</a>, amount: <a class="primitive" href="https://doc.rust-lang.org/nightly/core/primitive.u128.html">u128</a>) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.assert_approved" class="fn">assert_approved</a>(&amp;self, owner: &amp;ActorId, operator: &amp;ActorId) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.mint_impl" class="fn">mint_impl</a>(
+        &amp;mut self,
+        account: &amp;ActorId,
+        id: &amp;<a class="type" href="../io/type.TokenId.html" title="type gear_lib::multitoken::io::TokenId">TokenId</a>,
+        amount: <a class="primitive" href="https://doc.rust-lang.org/nightly/core/primitive.u128.html">u128</a>,
+        meta: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="../io/struct.TokenMetadata.html" title="struct gear_lib::multitoken::io::TokenMetadata">TokenMetadata</a>&gt;
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.mint" class="fn">mint</a>(
+        &amp;mut self,
+        account: &amp;ActorId,
+        ids: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/vec/struct.Vec.html" title="struct alloc::vec::Vec">Vec</a>&lt;<a class="type" href="../io/type.TokenId.html" title="type gear_lib::multitoken::io::TokenId">TokenId</a>&gt;,
+        amounts: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/vec/struct.Vec.html" title="struct alloc::vec::Vec">Vec</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/core/primitive.u128.html">u128</a>&gt;,
+        meta: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/vec/struct.Vec.html" title="struct alloc::vec::Vec">Vec</a>&lt;<a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="../io/struct.TokenMetadata.html" title="struct gear_lib::multitoken::io::TokenMetadata">TokenMetadata</a>&gt;&gt;
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.burn_impl" class="fn">burn_impl</a>(&amp;mut self, id: &amp;<a class="type" href="../io/type.TokenId.html" title="type gear_lib::multitoken::io::TokenId">TokenId</a>, amount: <a class="primitive" href="https://doc.rust-lang.org/nightly/core/primitive.u128.html">u128</a>) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.burn" class="fn">burn</a>(&amp;mut self, ids: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/vec/struct.Vec.html" title="struct alloc::vec::Vec">Vec</a>&lt;<a class="type" href="../io/type.TokenId.html" title="type gear_lib::multitoken::io::TokenId">TokenId</a>&gt;, amounts: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/vec/struct.Vec.html" title="struct alloc::vec::Vec">Vec</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/core/primitive.u128.html">u128</a>&gt;) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.transfer_from_impl" class="fn">transfer_from_impl</a>(
+        &amp;mut self,
+        from: &amp;ActorId,
+        to: &amp;ActorId,
+        id: &amp;<a class="type" href="../io/type.TokenId.html" title="type gear_lib::multitoken::io::TokenId">TokenId</a>,
+        amount: <a class="primitive" href="https://doc.rust-lang.org/nightly/core/primitive.u128.html">u128</a>
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.transfer_from" class="fn">transfer_from</a>(
+        &amp;mut self,
+        from: &amp;ActorId,
+        to: &amp;ActorId,
+        ids: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/vec/struct.Vec.html" title="struct alloc::vec::Vec">Vec</a>&lt;<a class="type" href="../io/type.TokenId.html" title="type gear_lib::multitoken::io::TokenId">TokenId</a>&gt;,
+        amounts: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/vec/struct.Vec.html" title="struct alloc::vec::Vec">Vec</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/core/primitive.u128.html">u128</a>&gt;
+    ) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.approve" class="fn">approve</a>(&amp;mut self, to: &amp;ActorId) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.revoke_approval" class="fn">revoke_approval</a>(&amp;mut self, to: &amp;ActorId) { ... }
+<span class="item-spacer"></span>    fn <a href="#method.balance_of" class="fn">balance_of</a>(&amp;self, accounts: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/vec/struct.Vec.html" title="struct alloc::vec::Vec">Vec</a>&lt;ActorId&gt;, ids: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/vec/struct.Vec.html" title="struct alloc::vec::Vec">Vec</a>&lt;<a class="type" href="../io/type.TokenId.html" title="type gear_lib::multitoken::io::TokenId">TokenId</a>&gt;) { ... }
+}</code></pre><h2 id="provided-methods" class="small-section-header">Provided Methods<a href="#provided-methods" class="anchor">§</a></h2><div class="methods"><section id="method.assert_can_burn" class="method"><a class="srclink rightside" href="../../../src/gear_lib/multitoken/mtk_core.rs.html#7-11">source</a><h4 class="code-header">fn <a href="#method.assert_can_burn" class="fn">assert_can_burn</a>(&amp;mut self, owner: &amp;ActorId, id: &amp;<a class="type" href="../io/type.TokenId.html" title="type gear_lib::multitoken::io::TokenId">TokenId</a>, amount: <a class="primitive" href="https://doc.rust-lang.org/nightly/core/primitive.u128.html">u128</a>)</h4></section><section id="method.assert_can_transfer" class="method"><a class="srclink rightside" href="../../../src/gear_lib/multitoken/mtk_core.rs.html#13-17">source</a><h4 class="code-header">fn <a href="#method.assert_can_transfer" class="fn">assert_can_transfer</a>(&amp;self, from: &amp;ActorId, id: &amp;<a class="primitive" href="https://doc.rust-lang.org/nightly/core/primitive.u128.html">u128</a>, amount: <a class="primitive" href="https://doc.rust-lang.org/nightly/core/primitive.u128.html">u128</a>)</h4></section><section id="method.assert_approved" class="method"><a class="srclink rightside" href="../../../src/gear_lib/multitoken/mtk_core.rs.html#19-25">source</a><h4 class="code-header">fn <a href="#method.assert_approved" class="fn">assert_approved</a>(&amp;self, owner: &amp;ActorId, operator: &amp;ActorId)</h4></section><section id="method.mint_impl" class="method"><a class="srclink rightside" href="../../../src/gear_lib/multitoken/mtk_core.rs.html#28-45">source</a><h4 class="code-header">fn <a href="#method.mint_impl" class="fn">mint_impl</a>(
+    &amp;mut self,
+    account: &amp;ActorId,
+    id: &amp;<a class="type" href="../io/type.TokenId.html" title="type gear_lib::multitoken::io::TokenId">TokenId</a>,
+    amount: <a class="primitive" href="https://doc.rust-lang.org/nightly/core/primitive.u128.html">u128</a>,
+    meta: <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="../io/struct.TokenMetadata.html" title="struct gear_lib::multitoken::io::TokenMetadata">TokenMetadata</a>&gt;
+)</h4></section><details class="toggle method-toggle" open><summary><section id="method.mint" class="method"><a class="srclink rightside" href="../../../src/gear_lib/multitoken/mtk_core.rs.html#56-86">source</a><h4 class="code-header">fn <a href="#method.mint" class="fn">mint</a>(
+    &amp;mut self,
+    account: &amp;ActorId,
+    ids: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/vec/struct.Vec.html" title="struct alloc::vec::Vec">Vec</a>&lt;<a class="type" href="../io/type.TokenId.html" title="type gear_lib::multitoken::io::TokenId">TokenId</a>&gt;,
+    amounts: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/vec/struct.Vec.html" title="struct alloc::vec::Vec">Vec</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/core/primitive.u128.html">u128</a>&gt;,
+    meta: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/vec/struct.Vec.html" title="struct alloc::vec::Vec">Vec</a>&lt;<a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="../io/struct.TokenMetadata.html" title="struct gear_lib::multitoken::io::TokenMetadata">TokenMetadata</a>&gt;&gt;
+)</h4></section></summary><div class="docblock"><p>Mints multiple new tokens (in case all input length is 1 - simple mint)
+Requirements:</p>
+<ul>
+<li><code>ids</code> element must a unique value</li>
+<li><code>account</code> must be a non-zero account
+Arguments:</li>
+<li><code>account</code>: An account to which minted token will be assigned</li>
+<li><code>ids</code>: The vector of IDs of minted tokens</li>
+<li><code>amounts</code>: The vector of amounts of tokens to mint (1 in case of an NFT)</li>
+<li><code>meta</code>: The vector of optional additional metadata for NFTs</li>
+</ul>
+</div></details><section id="method.burn_impl" class="method"><a class="srclink rightside" href="../../../src/gear_lib/multitoken/mtk_core.rs.html#89-96">source</a><h4 class="code-header">fn <a href="#method.burn_impl" class="fn">burn_impl</a>(&amp;mut self, id: &amp;<a class="type" href="../io/type.TokenId.html" title="type gear_lib::multitoken::io::TokenId">TokenId</a>, amount: <a class="primitive" href="https://doc.rust-lang.org/nightly/core/primitive.u128.html">u128</a>)</h4></section><details class="toggle method-toggle" open><summary><section id="method.burn" class="method"><a class="srclink rightside" href="../../../src/gear_lib/multitoken/mtk_core.rs.html#106-130">source</a><h4 class="code-header">fn <a href="#method.burn" class="fn">burn</a>(&amp;mut self, ids: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/vec/struct.Vec.html" title="struct alloc::vec::Vec">Vec</a>&lt;<a class="type" href="../io/type.TokenId.html" title="type gear_lib::multitoken::io::TokenId">TokenId</a>&gt;, amounts: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/vec/struct.Vec.html" title="struct alloc::vec::Vec">Vec</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/core/primitive.u128.html">u128</a>&gt;)</h4></section></summary><div class="docblock"><p>Burns multiple tokens (in case all input length is 1 - simple burn)
+Requirements:</p>
+<ul>
+<li>Only token owner can perform this action</li>
+<li><code>ids</code> element must be the ID of the existing token</li>
+<li><code>amounts</code> element must not exceed user’s token balance
+Arguments:</li>
+<li><code>ids</code>: The vector of ids of the token to be burnt</li>
+<li><code>amounts</code>: The vector of amounts of token to be burnt</li>
+</ul>
+</div></details><section id="method.transfer_from_impl" class="method"><a class="srclink rightside" href="../../../src/gear_lib/multitoken/mtk_core.rs.html#133-142">source</a><h4 class="code-header">fn <a href="#method.transfer_from_impl" class="fn">transfer_from_impl</a>(
+    &amp;mut self,
+    from: &amp;ActorId,
+    to: &amp;ActorId,
+    id: &amp;<a class="type" href="../io/type.TokenId.html" title="type gear_lib::multitoken::io::TokenId">TokenId</a>,
+    amount: <a class="primitive" href="https://doc.rust-lang.org/nightly/core/primitive.u128.html">u128</a>
+)</h4></section><details class="toggle method-toggle" open><summary><section id="method.transfer_from" class="method"><a class="srclink rightside" href="../../../src/gear_lib/multitoken/mtk_core.rs.html#155-197">source</a><h4 class="code-header">fn <a href="#method.transfer_from" class="fn">transfer_from</a>(
+    &amp;mut self,
+    from: &amp;ActorId,
+    to: &amp;ActorId,
+    ids: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/vec/struct.Vec.html" title="struct alloc::vec::Vec">Vec</a>&lt;<a class="type" href="../io/type.TokenId.html" title="type gear_lib::multitoken::io::TokenId">TokenId</a>&gt;,
+    amounts: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/vec/struct.Vec.html" title="struct alloc::vec::Vec">Vec</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/core/primitive.u128.html">u128</a>&gt;
+)</h4></section></summary><div class="docblock"><p>Transfers multiple tokens to a new user (in case all input length is 1 - simple transfer)
+Requirements:</p>
+<ul>
+<li>Only the token owner or approved account can call that action</li>
+<li><code>to</code> must be a non-zero account</li>
+<li><code>ids</code> element must be the ID of the existing token</li>
+<li><code>amounts</code> element must not exceed from’s balance
+Arguments:</li>
+<li><code>from</code>: An account from which token will be transferred</li>
+<li><code>to</code>: An account to which token will be transferred</li>
+<li><code>ids</code>: The vector of IDs of transferred token</li>
+<li><code>amounts</code>: The vector of amounts of transferred token</li>
+</ul>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.approve" class="method"><a class="srclink rightside" href="../../../src/gear_lib/multitoken/mtk_core.rs.html#205-222">source</a><h4 class="code-header">fn <a href="#method.approve" class="fn">approve</a>(&amp;mut self, to: &amp;ActorId)</h4></section></summary><div class="docblock"><p>Gives a right to another account to manage its tokens
+Requirements:</p>
+<ul>
+<li>Only the token owner can call that action</li>
+<li><code>to</code> must be a non-zero account
+Arguments:</li>
+<li><code>to</code>: An account that will be approved to manage the tokens</li>
+</ul>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.revoke_approval" class="method"><a class="srclink rightside" href="../../../src/gear_lib/multitoken/mtk_core.rs.html#230-245">source</a><h4 class="code-header">fn <a href="#method.revoke_approval" class="fn">revoke_approval</a>(&amp;mut self, to: &amp;ActorId)</h4></section></summary><div class="docblock"><p>Removed a right to another account to manage its tokens
+Requirements:</p>
+<ul>
+<li>Only the token owner can call that action</li>
+<li><code>to</code> must be a non-zero account
+Arguments:</li>
+<li><code>to</code>: An account that won’t be able to manage the tokens</li>
+</ul>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.balance_of" class="method"><a class="srclink rightside" href="../../../src/gear_lib/multitoken/mtk_core.rs.html#252-269">source</a><h4 class="code-header">fn <a href="#method.balance_of" class="fn">balance_of</a>(&amp;self, accounts: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/vec/struct.Vec.html" title="struct alloc::vec::Vec">Vec</a>&lt;ActorId&gt;, ids: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/vec/struct.Vec.html" title="struct alloc::vec::Vec">Vec</a>&lt;<a class="type" href="../io/type.TokenId.html" title="type gear_lib::multitoken::io::TokenId">TokenId</a>&gt;)</h4></section></summary><div class="docblock"><p>Returns the amount of multiple specific tokens multiple users have
+(in case all input length is 1 - simple balance_of)
+Arguments:</p>
+<ul>
+<li><code>accounts</code>: The vectors of IDs of the actor</li>
+<li><code>id</code>: The vector of token IDs which balance will be returned</li>
+</ul>
+</div></details></div><h2 id="implementors" class="small-section-header">Implementors<a href="#implementors" class="anchor">§</a></h2><div id="implementors-list"></div><script src="../../../implementors/gear_lib/multitoken/mtk_core/trait.MTKCore.js" async></script></section></div></main></body></html>

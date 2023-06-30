@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["FTQuery","FTQueryReply"],"struct":["FTState"],"trait":["FTMetaState","FTStateKeeper"]};
