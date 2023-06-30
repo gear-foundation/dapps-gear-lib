@@ -11,4 +11,4 @@ gstd = { git = "https://github.com/gear-tech/gear", rev = "cfb433a" }
 primitive-types = { version = "0.12", default-features = false }
 scale-info = { version = "2", default-features = false }
 sr25519 = { package = "gear-lib-sr25519", path = "../sr25519" }
-hashbrown = "0.13"
+hashbrown = "0.14"
