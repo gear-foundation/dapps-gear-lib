@@ -6,9 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.8] - 2023-06-30
+### Changed
+- Updated Gear dependencies to rev = "946ac47"
 
 ## [0.3.8] - 2023-06-30
-
 ### Changed
 - Updated Gear dependencies to rev = "cfb433a"
 
