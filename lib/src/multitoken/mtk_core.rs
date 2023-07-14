@@ -11,9 +11,7 @@ pub trait MTKCore: StateKeeper + MTKTokenState {
     }
 
     fn assert_can_transfer(&self, from: &ActorId, id: &u128, amount: u128) {
-        if !(from == &msg::source()
-            || self.get_balance(&msg::source(), id) >= amount)
-        {
+        if !(from == &msg::source() || self.get_balance(&msg::source(), id) >= amount) {
             panic!("MTK: Wrong owner or insufficient balance");
         }
     }
