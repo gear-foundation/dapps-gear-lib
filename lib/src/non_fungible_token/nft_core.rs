@@ -274,11 +274,7 @@ pub trait NFTCore: NFTStateKeeper {
 
     /// Checks that `msg::source()` is the owner of the token with indicated `token_id`
     fn assert_owner(&self, owner: &ActorId) {
-<<<<<<< HEAD
-        if !(owner == &msg::source()) {
-=======
         if owner != &msg::source() {
->>>>>>> master
             panic!("Not allowed to transfer");
         }
     }
