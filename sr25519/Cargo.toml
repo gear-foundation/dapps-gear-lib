@@ -6,4 +6,4 @@ edition.workspace = true
 license.workspace = true
 
 [dependencies]
-schnorrkel = { version = "0.10.2", default-features = false, features = ["preaudit_deprecated", "u64_backend"] }
+schnorrkel = { version = "0.11.1", default-features = false, features = ["preaudit_deprecated", "u64_backend"] }
